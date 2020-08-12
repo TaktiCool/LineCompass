@@ -1,0 +1,23 @@
+name = "LineCompass"
+mainprefix = "tc"
+modname = "LineCompass"
+prefix = ""
+author = "TactiCool"
+sig_version = 3
+version = "1.0.0.0"
+reuse_private_key = false
+files = [
+    "mod.cpp",
+    "*.paa",
+    "LICENSE"
+]
+
+releasebuild = [
+    "@zip @LineCompass"
+]
+
+key_name = "LineCompass_{{version}}"
+authority = "LineCompass_{{version}}-{{git \"id 8\"}}"
+
+[header_exts]
+# version= "{{git \"id 8\"}}"
