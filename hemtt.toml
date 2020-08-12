@@ -20,4 +20,4 @@ key_name = "LineCompass_{{version}}"
 authority = "LineCompass_{{version}}-{{git \"id 8\"}}"
 
 [header_exts]
-# version= "{{git \"id 8\"}}"
+version= "{{git \"id 8\"}}"

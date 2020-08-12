@@ -57,7 +57,6 @@ FUNC(getNearUnits) = {
     if ((GVAR(nearUnitsCache) select 0) - time >= 2) then {
         GVAR(nearUnitsCache) select 1;
     } else {
-        hintSilent "Update Near Untis";
         private _nearObjects = _postion nearObjects _radius;
 
         private _return = _nearObjects select {
