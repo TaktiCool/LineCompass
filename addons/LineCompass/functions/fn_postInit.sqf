@@ -13,7 +13,7 @@
     Returns:
     None
 */
-if (side player == sideLogic && {player isKindOf "VirtualSpectator_F"}) exitWith {};
+if ((!hasInterface || {side player == sideLogic}) && {player isKindOf "VirtualSpectator_F"}) exitWith {};
 waitUntil {!isNull findDisplay 46};
 call FUNC(showCompass);
 // The draw3D event triggers on each frame if the client window has focus.
