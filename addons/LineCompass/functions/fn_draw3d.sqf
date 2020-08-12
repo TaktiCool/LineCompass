@@ -160,13 +160,6 @@ if (_nextLineMarkerControl < count GVAR(lineMarkerControlPool)) then {
 private _nextIconMarkerControl = 0;
 
 private _nearUnits = [positionCameraToWorld [0, 0, 0], GVAR(UnitDistance)] call FUNC(getNearUnits);
-private _sideColor = [
-    [0, 0.4, 0.8, 1], // West
-    [0.6, 0, 0, 1], // East
-    [0, 0.5, 0, 1], // independent
-    [0.4, 0, 0.5, 1] // Civilian
-] param [[west, east, independent, civilian] find playerSide, [0.4, 0, 0.5, 1]];
-private _groupColor = [0, 0.87, 0, 1];
 
 {
     private _targetSide = side (group _x);
@@ -193,11 +186,24 @@ private _groupColor = [0, 0.87, 0, 1];
 
         private _icon = "a3\ui_f\data\map\Markers\Military\dot_ca.paa";
         private _size = 3.6;
+        if (leader _x == _x) then {
+            _icon = "a3\ui_f\data\gui\cfg\ranks\corporal_gs.paa";
+            _size = 1.3;
+        };
+        if (_x getUnitTrait "medic" || _x getVariable ["ace_medical_medicClass", 0] != 0) then {
+            _icon = "a3\ui_f\data\map\vehicleicons\pictureheal_ca.paa";
+            _size = 2;
+        };
+        if !(isNil {_x getVariable QGVAR(UnitIcon)}) then {
+            private _data = _x getVariable [QGVAR(UnitIcon), [_icon, _size]];
+            _icon = _data param [0, _icon, [""]];
+            _size = _data param [1, _size, [0]];
+        };
         _size = [PX(_size), PY(_size)];
 
         _control ctrlSetText _icon;
 
-        private _color = [_sideColor, _groupColor] select (group player == group _x);
+        private _color = [GVAR(SideColor), GVAR(GroupColor)] select (group player == group _x);
         _color set [3, ((1 - 0.2 * ((player distance _x) - (GVAR(UnitDistance) - 6))) min 1) * ((_compassAngle - _viewDirection) call FUNC(getAlphaFromX)) min 1];
         _control ctrlSetTextColor _color;
 
