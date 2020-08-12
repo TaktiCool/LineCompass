@@ -86,11 +86,21 @@ GVAR(customWaypointPosition) = customWaypointPosition;
 if (isNil QGVAR(UnitDistance)) then {
     GVAR(UnitDistance) = 31;
 };
+
 GVAR(GroupColor) = [0, 0.87, 0, 1];
 GVAR(SideColor) = [0, 0.4, 0.8, 1];
+GVAR(WaypointColor) = [0.9, 0.66, 0.01, 1];
+
 if (isClass (configFile >> "CfgPatches" >> "CBA_Settings")) then {
     [] spawn {
-        [QGVAR(GroupColor), "COLOR", "Group Color", "Line Compass", [0, 0.87, 0, 1]] call CBA_fnc_addSetting;
-        [QGVAR(SideColor), "COLOR", "Side Color", "Line Compass", [0, 0.4, 0.8, 1]] call CBA_fnc_addSetting;
+        [QGVAR(GroupColor), "COLOR", "Group Color", "Line Compass", GVAR(GroupColor)] call CBA_fnc_addSetting;
+        [QGVAR(SideColor), "COLOR", "Side Color", "Line Compass", GVAR(SideColor)] call CBA_fnc_addSetting;
+        [QGVAR(WaypointColor), "COLOR", "Waypoint Color", "Line Compass", GVAR(WaypointColor), nil, {
+            params ["_value"];
+            if !(customWaypointPosition isEqualTo []) then {
+                ["MOVE", _value, customWaypointPosition] call FUNC(addLineMarker);
+            };
+        }] call CBA_fnc_addSetting;
     };
+
 };

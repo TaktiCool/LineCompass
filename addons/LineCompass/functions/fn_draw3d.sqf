@@ -19,7 +19,11 @@ private _dialog = uiNamespace getVariable QGVAR(Compass);
 if (isNull _dialog) exitWith {};
 
 if !(customWaypointPosition isEqualTo GVAR(customWaypointPosition)) then {
-    ["MOVE", [0.9, 0.66, 0.01, 1], customWaypointPosition] call FUNC(addLineMarker);
+    if (customWaypointPosition isEqualTo []) then {
+        "MOVE" call FUNC(removeLineMarker);
+    } else {
+        ["MOVE", GVAR(WaypointColor), customWaypointPosition] call FUNC(addLineMarker);
+    };
     GVAR(customWaypointPosition) = customWaypointPosition;
 };
 private _viewDirectionVector = (positionCameraToWorld [0, 0, 0]) vectorDiff (positionCameraToWorld [0, 0, -1]);
