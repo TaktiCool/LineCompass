@@ -34,18 +34,21 @@ FUNC(getAlphaFromX) = {
     (3 - (abs (_this - 92.5) / 30)) max 0
 };
 
+GVAR(CompassShown) = false;
+
 // Function to show the compass
 FUNC(showCompass) = {
     // Reset the cache
     GVAR(lineAlphaCache) = GVAR(lineAlphaCache) apply {1};
     GVAR(bearingAlphaCache) = GVAR(bearingAlphaCache) apply {1};
-
+    GVAR(CompassShown) = true;
     // Show the compass and make sure it is not shown if the map is open
     ([QGVAR(Compass)] call BIS_fnc_rscLayer) cutRsc [QGVAR(Compass), "PLAIN", 0, false];
 };
 
 FUNC(hideCompass) = {
     ([QGVAR(Compass)] call BIS_fnc_rscLayer) cutFadeOut 0;
+    GVAR(CompassShown) = false;
 };
 
 GVAR(nearUnitsCache) = [0, []];
@@ -90,9 +93,10 @@ if (isNil QGVAR(UnitDistance)) then {
 GVAR(GroupColor) = [0, 0.87, 0, 1];
 GVAR(SideColor) = [0, 0.4, 0.8, 1];
 GVAR(WaypointColor) = [0.9, 0.66, 0.01, 1];
-
+GVAR(CompassAvailableShown) = false;
 if (isClass (configFile >> "CfgPatches" >> "CBA_Settings")) then {
     [] spawn {
+        [QGVAR(CompassAvailableShown),  "CHECKBOX", "Show Only When Compass is Available", "Line Compass", GVAR(CompassAvailableShown), 1, {}, true] call CBA_fnc_addSetting;
         [QGVAR(GroupColor), "COLOR", "Group Color", "Line Compass", GVAR(GroupColor)] call CBA_fnc_addSetting;
         [QGVAR(SideColor), "COLOR", "Side Color", "Line Compass", GVAR(SideColor)] call CBA_fnc_addSetting;
         [QGVAR(WaypointColor), "COLOR", "Waypoint Color", "Line Compass", GVAR(WaypointColor), nil, {

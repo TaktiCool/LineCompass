@@ -14,6 +14,16 @@
     None
 */
 
+if (GVAR(CompassAvailableShown) && {floor(time % 1) == 0}) then {
+    if (!GVAR(CompassShown) && {"ItemCompass" in (assignedItems player)}) then {
+        call FUNC(ShowCompass);
+    } else {
+        if (GVAR(CompassShown) && {!("ItemCompass" in (assignedItems player))}) then {
+            call FUNC(HideCompass);
+        };
+    };
+};
+
 // Exit if the compass is not visible
 private _dialog = uiNamespace getVariable QGVAR(Compass);
 if (isNull _dialog) exitWith {};
