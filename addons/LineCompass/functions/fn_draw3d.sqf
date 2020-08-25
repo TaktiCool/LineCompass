@@ -15,10 +15,10 @@
 */
 
 if (GVAR(CompassAvailableShown) && {floor(time % 1) == 0}) then {
-    if (!GVAR(CompassShown) && {"ItemCompass" in (assignedItems player)}) then {
+    if (!GVAR(CompassShown) && { "ItemCompass" in (assignedItems player) }) then {
         call FUNC(ShowCompass);
     } else {
-        if (GVAR(CompassShown) && {!("ItemCompass" in (assignedItems player))}) then {
+        if (GVAR(CompassShown) && { !("ItemCompass" in (assignedItems player)) }) then {
             call FUNC(HideCompass);
         };
     };
@@ -36,6 +36,11 @@ if !(customWaypointPosition isEqualTo GVAR(customWaypointPosition)) then {
     };
     GVAR(customWaypointPosition) = customWaypointPosition;
 };
+if (GVAR(fingerTime) != -1 && { GVAR(fingerTime) <= time }) then {
+    "Fingering" call FUNC(removeLineMarker);
+    GVAR(fingerTime) = -1;
+};
+
 private _viewDirectionVector = (positionCameraToWorld [0, 0, 0]) vectorDiff (positionCameraToWorld [0, 0, -1]);
 private _viewDirection = ((_viewDirectionVector select 0) atan2 (_viewDirectionVector select 1) + 360) % 360;
 private _currentPosition = getPosVisual player;
@@ -67,7 +72,16 @@ for "_i" from 0 to 13 do {
     private _control = _dialog displayCtrl (7301 + _idc);
     private _newAlpha = (_i * 15 + _bearingOffset) call FUNC(getAlphaFromX);
     private _oldAlpha = GVAR(bearingAlphaCache) select _idc;
-
+    if (GVAR(DrawBearing) == 1) then {
+        private _idcMod = _idc mod 3;
+        if (_idcMod != 0) then {
+            _newAlpha = 0;
+        };
+    } else {
+        if (GVAR(DrawBearing) == 0) then {
+            _newAlpha = 0;
+        };
+    };
     if (_newAlpha != _oldAlpha) then {
         GVAR(bearingAlphaCache) set [_idc, _newAlpha];
         _control ctrlSetTextColor [1, 1, 1, _newAlpha];
